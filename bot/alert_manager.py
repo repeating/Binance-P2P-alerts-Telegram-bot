@@ -18,7 +18,7 @@ class Alert:
         self.pay_type = pay_type
         self.active = True
         self.last_triggered = None  # Track when the alert was last triggered
-        self.trigger_interval = 15  # in minutes
+        self.trigger_interval = 1  # in minutes
 
     async def check_alert(self):
         """
@@ -46,6 +46,8 @@ class AlertManager:
     def __init__(self):
         self.alerts = {}
         self.lock = asyncio.Lock()  # Use an asyncio Lock instead of threading.Lock
+        self.loop = asyncio.get_event_loop()
+        self.loop.create_task(self.start_checking())
 
     async def add_alert(self, user_id, asset, fiat, trade_type, threshold_price, pay_type):
         async with self.lock:
@@ -91,7 +93,6 @@ class AlertManager:
 # Example usage
 async def main():
     alert_manager = AlertManager()
-    asyncio.create_task(alert_manager.start_checking())
 
     alert_id = await alert_manager.add_alert(user_id='Alex', asset='USDT', fiat='USD', trade_type='BUY', threshold_price=1.02, pay_type='WISE')
     alert_id = await alert_manager.add_alert(user_id='Alex', asset='USDT', fiat='USD', trade_type='BUY', threshold_price=1.06, pay_type='REVOLUT')

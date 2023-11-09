@@ -13,7 +13,7 @@ def to_float(s):
         return float(s)
 
 
-async def get_offers(asset: str, fiat: str, trade_type: str, rows: int = 3, page: int = 1, trans_amount: str = None,
+async def get_offers(asset: str, fiat: str, trade_type: str, rows: int = 5, page: int = 1, trans_amount: str = None,
                pay_type: str = "WISE") -> dict:
     """
     Fetch the best offers from Binance P2P.
@@ -21,7 +21,7 @@ async def get_offers(asset: str, fiat: str, trade_type: str, rows: int = 3, page
     :param asset: Cryptocurrency asset, e.g., 'USDT', 'BTC'.
     :param fiat: Fiat currency, e.g., 'USD', 'EUR'.
     :param trade_type: Trade type, either 'BUY' or 'SELL'.
-    :param rows: Number of offers to retrieve, default is 3.
+    :param rows: Number of offers to retrieve, default is 5.
     :param page: Page number for pagination, default is 1.
     :param trans_amount: Transaction amount for filtering offers.
     :param pay_type: payment type, default is "WISE".
