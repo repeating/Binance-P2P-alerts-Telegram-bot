@@ -1,5 +1,6 @@
-import requests
 import pprint
+import aiohttp
+import asyncio
 
 # Binance P2P API endpoint
 BINANCE_P2P_API_URL = 'https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search'
@@ -12,7 +13,7 @@ def to_float(s):
         return float(s)
 
 
-def get_offers(asset: str, fiat: str, trade_type: str, rows: int = 3, page: int = 1, trans_amount: str = None,
+async def get_offers(asset: str, fiat: str, trade_type: str, rows: int = 3, page: int = 1, trans_amount: str = None,
                pay_type: str = "WISE") -> dict:
     """
     Fetch the best offers from Binance P2P.
@@ -41,26 +42,26 @@ def get_offers(asset: str, fiat: str, trade_type: str, rows: int = 3, page: int 
         "Content-Type": "application/json"
     }
 
-    response = requests.post(BINANCE_P2P_API_URL, json=data, headers=headers)
-
-    if response.status_code == 200:
-        offers_data = response.json().get('data', [])
-        offers = []
-        for item in offers_data:
-            adv = item.get('adv', {})
-            offer = {
-                'price': to_float(adv.get('price')),
-                'min_amount': to_float(adv.get('minSingleTransAmount')),
-                'max_amount': to_float(adv.get('maxSingleTransAmount'))
-            }
-            offers.append(offer)
-        return offers
-    else:
-        raise Exception(f"Error fetching offers from Binance P2P: {response.status_code} - {response.text}")
+    async with aiohttp.ClientSession() as session:
+        async with session.post(BINANCE_P2P_API_URL, json=data, headers=headers) as response:
+            if response.status == 200:
+                response_json = await response.json()
+                offers_data = response_json.get('data', [])
+                offers = [{
+                    'price': to_float(adv.get('price')),
+                    'min_amount': to_float(adv.get('minSingleTransAmount')),
+                    'max_amount': to_float(adv.get('maxSingleTransAmount'))
+                } for item in offers_data for adv in [item.get('adv', {})]]
+                return offers
+            else:
+                raise Exception(f"Error fetching offers from Binance P2P: {response.status} - {await response.text()}")
 
 
-# Example usage:
-if __name__ == "__main__":
-    # Fetch best offers for USDT/NGN for a SELL trade
-    offers = get_offers('USDT', 'USD', 'BUY')
+async def main():
+    # Fetch best offers for USDT/USD for a BUY trade
+    offers = await get_offers('USDT', 'USD', 'BUY')
     pprint.pprint(offers, indent=2)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
