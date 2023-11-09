@@ -42,7 +42,16 @@ class Alert:
         self.last_triggered = datetime.now()
 
 
-class AlertManager:
+class Singleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+class AlertManager(metaclass=Singleton):
     def __init__(self):
         self.alerts = {}
         self.lock = asyncio.Lock()  # Use an asyncio Lock instead of threading.Lock
