@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import CallbackContext
-from bot.alert_manager import AlertManager
+from bot.alerts.alert_manager import AlertManager
 
 alert_manager = AlertManager()
 

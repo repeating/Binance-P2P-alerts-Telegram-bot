@@ -1,7 +1,7 @@
 from telegram import Update
 from telegram.ext import ConversationHandler
 from .common import format_offers_message
-from bot.binance_api import get_offers  # This should be an async function
+from bot.binance_api import get_offers
 
 # Define the states used for the /prices conversation
 (CRYPTO, FIAT, ORDER_TYPE) = range(3)
@@ -20,7 +20,7 @@ async def get_crypto(update: Update, context) -> int:
 
 async def get_fiat(update: Update, context) -> int:
     context.user_data['fiat'] = update.message.text.upper()
-    await update.message.reply_text("Please specify the order type: buy or sell.")
+    await update.message.reply_text("Is this alert for a 'BUY' or 'SELL' order?")
     return ORDER_TYPE
 
 

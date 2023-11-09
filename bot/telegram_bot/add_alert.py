@@ -1,14 +1,14 @@
 from telegram import Update
 from telegram.ext import CallbackContext, ConversationHandler
-from bot.alert_manager import AlertManager
+from bot.alerts import AlertManager
 
-# Define the states used for the /set_alert conversation
+# Define the states used for the /add_alert conversation
 (SET_CRYPTO, SET_FIAT, SET_ORDER_TYPE, SET_THRESHOLD, SET_PAY_TYPE) = range(5)
 
 alert_manager = AlertManager()
 
 
-async def start_set_alert(update: Update, context: CallbackContext) -> int:
+async def start_add_alert(update: Update, context: CallbackContext) -> int:
     await update.message.reply_text("Please enter the crypto asset for the alert (e.g., USDT, BTC):")
     return SET_CRYPTO
 

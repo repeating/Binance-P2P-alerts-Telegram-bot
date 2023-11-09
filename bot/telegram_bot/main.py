@@ -3,7 +3,7 @@ from telegram.ext import Application
 from secret import TELEGRAM_TOKEN
 from .common import *
 from .prices import *
-from .set_alert import *
+from .add_alert import *
 from .show_alerts import *
 from .remove_alert import *
 from .inactivate_alert import *
@@ -33,9 +33,9 @@ def main():
     )
     application.add_handler(prices_conv_handler)
 
-    # Define and add conversation handler for the /set_alert command
-    set_alert_conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('set_alert', start_set_alert)],
+    # Define and add conversation handler for the /add_alert command
+    add_alert_conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('add_alert', start_add_alert)],
         states={
             SET_CRYPTO: [MessageHandler(filters.TEXT & ~filters.COMMAND, set_crypto)],
             SET_FIAT: [MessageHandler(filters.TEXT & ~filters.COMMAND, set_fiat)],
@@ -45,7 +45,7 @@ def main():
         },
         fallbacks=[CommandHandler('cancel', cancel)]
     )
-    application.add_handler(set_alert_conv_handler)
+    application.add_handler(add_alert_conv_handler)
 
     # Define and add command handler for the /show_alerts command
     show_alerts_handler = CommandHandler('show_alerts', show_alerts)
