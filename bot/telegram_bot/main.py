@@ -5,6 +5,9 @@ from .common import *
 from .prices import *
 from .set_alert import *
 from .show_alerts import *
+from .remove_alert import *
+from .inactivate_alert import *
+from .activate_alert import *
 
 # Define conversation states
 (CRYPTO, FIAT, ORDER_TYPE, PRICE, REMOVE_ALERT) = range(5)
@@ -36,7 +39,7 @@ def main():
         states={
             SET_CRYPTO: [MessageHandler(filters.TEXT & ~filters.COMMAND, set_crypto)],
             SET_FIAT: [MessageHandler(filters.TEXT & ~filters.COMMAND, set_fiat)],
-            SET_ORDER_TYPE: [MessageHandler(filters.Regex('^(BUY|SELL)$'), set_order_type)],
+            SET_ORDER_TYPE: [MessageHandler(filters.TEXT & ~filters.COMMAND, set_order_type)],
             SET_THRESHOLD: [MessageHandler(filters.TEXT & ~filters.COMMAND, set_threshold)],
             SET_PAY_TYPE: [MessageHandler(filters.TEXT & ~filters.COMMAND, set_pay_type)],
         },
@@ -48,7 +51,21 @@ def main():
     show_alerts_handler = CommandHandler('show_alerts', show_alerts)
     application.add_handler(show_alerts_handler)
 
-    # ... Add handlers for /set_alert and /remove_alert ...
+    # Define and add command handler for the /remove_alert command
+    remove_alert_handler = CommandHandler('remove_alert', remove_alert)
+    application.add_handler(remove_alert_handler)
+
+    # Define and add command handler for the /inactivate_alert command
+    inactivate_alert_handler = CommandHandler('inactivate_alert', inactivate_alert)
+    application.add_handler(inactivate_alert_handler)
+
+    # Define and add command handler for the /inactivate_alert command
+    inactivate_alert_handler = CommandHandler('inactivate_alert', inactivate_alert)
+    application.add_handler(inactivate_alert_handler)
+
+    # Define and add command handler for the /activate_alert command
+    activate_alert_handler = CommandHandler('activate_alert', activate_alert)
+    application.add_handler(activate_alert_handler)
 
     # Run the bot until the user presses Ctrl-C
     application.run_polling()
