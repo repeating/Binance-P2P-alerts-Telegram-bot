@@ -1,13 +1,14 @@
+from telegram.ext import CommandHandler, MessageHandler, filters
 from telegram.ext import Application
 from secret import TELEGRAM_TOKEN
 from .common import *
 from .prices import *
 from .set_alert import *
+from .show_alerts import *
 
 # Define conversation states
 (CRYPTO, FIAT, ORDER_TYPE, PRICE, REMOVE_ALERT) = range(5)
 
-# Implement set_alert handlers...
 # Implement remove_alert handlers...
 
 
@@ -17,7 +18,7 @@ def main():
 
     application.add_error_handler(error)
 
-    # Define the conversation handler for the /prices command
+    # Define and add conversation handler for the /prices command
     prices_conv_handler = ConversationHandler(
         entry_points=[CommandHandler('prices', start_prices)],
         states={
@@ -27,11 +28,9 @@ def main():
         },
         fallbacks=[CommandHandler('cancel', cancel)]
     )
-
-    # Add handlers to the application
     application.add_handler(prices_conv_handler)
 
-    # Create the conversation handler for the /set_alert command
+    # Define and add conversation handler for the /set_alert command
     set_alert_conv_handler = ConversationHandler(
         entry_points=[CommandHandler('set_alert', start_set_alert)],
         states={
@@ -43,9 +42,11 @@ def main():
         },
         fallbacks=[CommandHandler('cancel', cancel)]
     )
-
-    # Add handlers to the application
     application.add_handler(set_alert_conv_handler)
+
+    # Define and add command handler for the /show_alerts command
+    show_alerts_handler = CommandHandler('show_alerts', show_alerts)
+    application.add_handler(show_alerts_handler)
 
     # ... Add handlers for /set_alert and /remove_alert ...
 
