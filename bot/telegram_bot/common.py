@@ -18,7 +18,7 @@ def format_offers_message(offers, context):
     for offer in offers:
         message += f"Price: {offer['price']} {context.user_data['fiat']}, "
         message += f"Min: {offer['min_amount']}, Max: {offer['max_amount']}\n"
-    message += f"\nhttps://p2p.binance.com/en/trade/{context.user_data['order_type']}/{context.user_data['asset']}?fiat={context.user_data['fiat']}"
+    message += f"\nhttps://p2p.binance.com/en/trade/{context.user_data['pay_type']}/{context.user_data['asset']}?fiat={context.user_data['fiat']}"
     message += f"\nDon't forget to uncheck 'Only show Merchant Ads'"
     return message
 

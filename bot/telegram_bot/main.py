@@ -65,4 +65,5 @@ def main():
     application.add_handler(activate_alert_handler)
 
     # Run the bot indefinitely
+    print('Running bot...')
     application.run_polling()
