@@ -1,6 +1,5 @@
 from telegram.ext import CommandHandler, MessageHandler, filters
 from telegram.ext import Application
-from secret import TELEGRAM_TOKEN
 from .common import *
 from .prices import *
 from .add_alert import *
@@ -11,8 +10,6 @@ from .activate_alert import *
 
 # Define conversation states
 (CRYPTO, FIAT, ORDER_TYPE, PRICE, REMOVE_ALERT) = range(5)
-
-# Implement remove_alert handlers...
 
 
 def main():
@@ -67,6 +64,5 @@ def main():
     activate_alert_handler = CommandHandler('activate_alert', activate_alert)
     application.add_handler(activate_alert_handler)
 
-    # Run the bot until the user presses Ctrl-C
+    # Run the bot indefinitely
     application.run_polling()
-
