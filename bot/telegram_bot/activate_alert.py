@@ -10,7 +10,7 @@ async def activate_alert(update: Update, context: CallbackContext) -> None:
     alert_id = int(context.args[0]) if context.args else None
 
     if alert_id is None:
-        await update.message.reply_text('Please provide the ID of the alert you wish to activate. Usage: /activate_alert <alert_id>')
+        await update.message.reply_text('Please provide the ID of the alert you wish to activate.\nUsage: /activate_alert <alert_id>')
         return
 
     alert = alert_manager.alerts.get(alert_id)

@@ -16,14 +16,13 @@ async def show_alerts(update: Update, context: CallbackContext) -> None:
     message = 'Your alerts:\n\n'
     for i, alert in enumerate(user_alerts):
         status = 'Active' if alert.active else 'Inactive'
-        message += (f"ID: {alert.alert_id}\n"
-                    f"Asset: {alert.asset}\n"
-                    f"Fiat: {alert.fiat}\n"
-                    f"Type: {alert.trade_type}\n"
-                    f"Threshold: {alert.threshold_price}\n"
-                    f"Payment Type: {alert.pay_type}\n"
-                    f"Status: {status}\n")
+        message += (f"<b>ID</b>: {alert.alert_id}\n\n"
+                    f"{alert.asset}\{alert.fiat}\n"
+                    f"<b>Type</b>: {alert.trade_type}\n"
+                    f"<b>Threshold</b>: {alert.threshold_price}\n"
+                    f"<b>Payment Type</b>: {alert.payment_method}\n"
+                    f"<b>Status</b>: {status}\n")
         if i < len(user_alerts) - 1:
-            message += '-------\n'
+            message += '\n-------\n\n'
 
-    await update.message.reply_text(message)
+    await update.message.reply_text(message, parse_mode='HTML')

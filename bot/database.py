@@ -16,7 +16,7 @@ class Database:
                     fiat TEXT NOT NULL,
                     trade_type TEXT NOT NULL,
                     threshold_price REAL NOT NULL,
-                    pay_type TEXT NOT NULL,
+                    payment_method TEXT NOT NULL,
                     active BOOLEAN NOT NULL,
                     last_triggered TIMESTAMP
                 )
@@ -26,9 +26,9 @@ class Database:
     def insert_alert(self, alert):
         with sqlite3.connect(self.db_name) as db:
             db.execute('''
-                INSERT INTO alerts (alert_id, user_id, asset, fiat, trade_type, threshold_price, pay_type, active)
+                INSERT INTO alerts (alert_id, user_id, asset, fiat, trade_type, threshold_price, payment_method, active)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (alert.alert_id, alert.user_id, alert.asset, alert.fiat, alert.trade_type, alert.threshold_price, alert.pay_type, 1))
+            ''', (alert.alert_id, alert.user_id, alert.asset, alert.fiat, alert.trade_type, alert.threshold_price, alert.payment_method, 1))
             db.commit()
 
     def delete_alert(self, alert_id):

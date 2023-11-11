@@ -7,9 +7,9 @@ This repository contains a Telegram bot, [@binance_p2p_alertsbot](https://t.me/b
 
 - `/prices`: Retrieves the top 5 offers for a specified crypto and fiat asset pair on Binance P2P. It prompts the user to enter the details of the crypto asset, fiat currency, and order type (buy/sell), then displays the best available offers.
 
-- `/set_alert`: Sets up a new price alert for Binance P2P. The bot will ask for the crypto asset, fiat asset, order type, threshold price, and payment type, then monitors the prices and notifies the user when conditions are met.
-
 - `/show_alerts`: Lists all active price alerts set by the user, showing details such as asset type, fiat currency, price threshold, and whether each alert is active or inactive.
+
+- `/add_alert`: Sets up a new price alert for Binance P2P. The bot will ask for the crypto asset, fiat asset, order type, threshold price, and payment type, then monitors the prices and notifies the user when conditions are met.
 
 - `/remove_alert`: Deletes a specified price alert. The user provides the ID of the alert they wish to remove.
 

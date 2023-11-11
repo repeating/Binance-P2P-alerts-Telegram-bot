@@ -18,18 +18,19 @@ class AlertManager(metaclass=Singleton):
         self.lock = asyncio.Lock()  # Use an asyncio Lock instead of threading.Lock
         self.loop = asyncio.get_event_loop()
         self.loop.create_task(self.start_checking())
-        self._id_generator = count(start=1)  # Unique ID generator
         self.db = Database('alerts.db')  # Initialize the Database class
         self.db.init_db()  # Ensure the database is set up
         self.alerts = self.db.load_alerts()
+        start_id = 1 + max([0] + [alert.alert_id for alert in self.alerts.values()])
+        self._id_generator = count(start=start_id)  # Unique ID generator
 
-    async def add_alert(self, user_id, asset, fiat, trade_type, threshold_price, pay_type):
+    async def add_alert(self, user_id, asset, fiat, trade_type, threshold_price, payment_method):
         async with self.lock:
             alert_id = next(self._id_generator)
-            alert = Alert(alert_id, user_id, asset, fiat, trade_type, threshold_price, pay_type)
+            alert = Alert(alert_id, user_id, asset, fiat, trade_type, threshold_price, payment_method)
             self.db.insert_alert(alert)
             self.alerts[alert_id] = alert
-            return alert_id
+            return alert_id, alert.link
 
     async def remove_alert(self, alert_id):
         async with self.lock:

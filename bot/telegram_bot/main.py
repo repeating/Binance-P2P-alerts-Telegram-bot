@@ -1,8 +1,8 @@
+from secret import TELEGRAM_TOKEN
 from telegram.ext import CommandHandler, MessageHandler, filters
 from telegram.ext import Application
+from bot.telegram_bot import add_alert, prices
 from .common import *
-from .prices import *
-from .add_alert import *
 from .show_alerts import *
 from .remove_alert import *
 from .inactivate_alert import *
@@ -20,11 +20,12 @@ def main():
 
     # Define and add conversation handler for the /prices command
     prices_conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('prices', start_prices)],
+        entry_points=[CommandHandler('prices', prices.start_prices)],
         states={
-            CRYPTO: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_crypto)],
-            FIAT: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_fiat)],
-            ORDER_TYPE: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_order_type)],
+            prices.GET_CRYPTO: [MessageHandler(filters.TEXT & ~filters.COMMAND, prices.get_crypto)],
+            prices.GET_FIAT: [MessageHandler(filters.TEXT & ~filters.COMMAND, prices.get_fiat)],
+            prices.GET_ORDER_TYPE: [MessageHandler(filters.TEXT & ~filters.COMMAND, prices.get_order_type)],
+            prices.GET_PAYMENT_METHOD: [MessageHandler(filters.TEXT & ~filters.COMMAND, prices.get_payment_method)],
         },
         fallbacks=[CommandHandler('cancel', cancel)]
     )
@@ -32,13 +33,13 @@ def main():
 
     # Define and add conversation handler for the /add_alert command
     add_alert_conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('add_alert', start_add_alert)],
+        entry_points=[CommandHandler('add_alert', add_alert.start_add_alert)],
         states={
-            SET_CRYPTO: [MessageHandler(filters.TEXT & ~filters.COMMAND, set_crypto)],
-            SET_FIAT: [MessageHandler(filters.TEXT & ~filters.COMMAND, set_fiat)],
-            SET_ORDER_TYPE: [MessageHandler(filters.TEXT & ~filters.COMMAND, set_order_type)],
-            SET_THRESHOLD: [MessageHandler(filters.TEXT & ~filters.COMMAND, set_threshold)],
-            SET_PAY_TYPE: [MessageHandler(filters.TEXT & ~filters.COMMAND, set_pay_type)],
+            add_alert.GET_CRYPTO: [MessageHandler(filters.TEXT & ~filters.COMMAND, add_alert.get_crypto)],
+            add_alert.GET_FIAT: [MessageHandler(filters.TEXT & ~filters.COMMAND, add_alert.get_fiat)],
+            add_alert.GET_ORDER_TYPE: [MessageHandler(filters.TEXT & ~filters.COMMAND, add_alert.get_order_type)],
+            add_alert.GET_PAYMENT_METHOD: [MessageHandler(filters.TEXT & ~filters.COMMAND, add_alert.get_payment_method)],
+            add_alert.GET_THRESHOLD: [MessageHandler(filters.TEXT & ~filters.COMMAND, add_alert.get_threshold)],
         },
         fallbacks=[CommandHandler('cancel', cancel)]
     )

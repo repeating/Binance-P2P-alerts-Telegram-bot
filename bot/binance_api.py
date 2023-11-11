@@ -1,30 +1,39 @@
 import pprint
 import aiohttp
 import asyncio
+from bot.utils import to_float
+from typing import List
 
 # Binance P2P API endpoint
 BINANCE_P2P_API_URL = 'https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search'
 
 
-def to_float(s):
-    if s is None:
-        return None
-    else:
-        return float(s)
+def get_link(fiat: str, asset: str, payment_method: str, order_type: str):
+    """
+    Get the link to the offers from Binance P2P.
+
+    :param asset: Cryptocurrency asset, e.g., 'USDT', 'BTC'.
+    :param fiat: Fiat currency, e.g., 'USD', 'EUR'.
+    :param payment_method: payment type, default is "Wise".
+    :param order_type: Order type, either 'Buy' or 'Sell'.
+    :return: str, link to the offers from Binance P2P.
+    """
+    url = f"https://p2p.binance.com/en/trade/{order_type}/{payment_method}/{asset}?fiat={fiat}"
+    return url
 
 
-async def get_offers(asset: str, fiat: str, trade_type: str, rows: int = 5, page: int = 1, trans_amount: str = None,
-               pay_type: str = "WISE") -> dict:
+async def get_offers(asset: str, fiat: str, trade_type: str, payment_method: str,
+                     rows: int = 5, page: int = 1, trans_amount: str = None) -> List[dict]:
     """
     Fetch the best offers from Binance P2P.
 
     :param asset: Cryptocurrency asset, e.g., 'USDT', 'BTC'.
     :param fiat: Fiat currency, e.g., 'USD', 'EUR'.
-    :param trade_type: Trade type, either 'BUY' or 'SELL'.
+    :param trade_type: Trade type, either 'Buy' or 'Sell'.
     :param rows: Number of offers to retrieve, default is 5.
     :param page: Page number for pagination, default is 1.
     :param trans_amount: Transaction amount for filtering offers.
-    :param pay_type: payment type, default is "WISE".
+    :param payment_method: payment type, default is "Wise".
     :return: List of offers from Binance P2P.
     """
     data = {
@@ -32,10 +41,10 @@ async def get_offers(asset: str, fiat: str, trade_type: str, rows: int = 5, page
         "fiat": fiat,
         "merchantCheck": 'true',  # Assuming this should always be true for more reliable offers.
         "page": page,
-        "payTypes": [pay_type],
+        "payTypes": [payment_method],
         "publisherType": None,  # Assuming we don't filter by publisher type.
         "rows": rows,
-        "tradeType": trade_type.upper(),
+        "tradeType": trade_type,
         "transAmount": trans_amount
     }
     headers = {
@@ -58,8 +67,8 @@ async def get_offers(asset: str, fiat: str, trade_type: str, rows: int = 5, page
 
 
 async def main():
-    # Fetch best offers for USDT/USD for a BUY trade
-    offers = await get_offers('USDT', 'USD', 'BUY')
+    # Fetch best offers for USDT/USD for a Buy trade
+    offers = await get_offers('USDT', 'USD', 'Buy')
     pprint.pprint(offers, indent=2)
 
 
