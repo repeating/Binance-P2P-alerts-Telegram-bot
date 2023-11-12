@@ -60,7 +60,7 @@ class AlertManager(metaclass=Singleton):
         # Use asyncio.gather to run tasks concurrently
         await asyncio.gather(*tasks)
 
-    async def start_checking(self, interval=15):
+    async def start_checking(self, interval=1):
         """
         Start the asynchronous loop that checks alerts.
         """
