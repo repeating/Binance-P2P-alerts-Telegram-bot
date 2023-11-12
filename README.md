@@ -1,4 +1,4 @@
-# Binance Telegram Bot 
+# Binance P2P alerts Telegram Bot 
 ![Python 3.9.6](https://img.shields.io/badge/python-3.9.6-blue.svg) ![MIT License](https://img.shields.io/badge/license-MIT-green.svg)
 
 This repository contains a Telegram bot, [@binance_p2p_alertsbot](https://t.me/binance_p2p_alertsbot), that interacts with the Binance P2P platform. It allows users to fetch the latest prices and set price alerts directly through Telegram.
